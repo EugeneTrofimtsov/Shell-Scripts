@@ -20,5 +20,6 @@ done;
 for i in `hive --database=${db_name} -e 'show tables;' | grep -v 'INFO' | grep -v 'WARN'`;
 do
 	echo "drop view if exists ${db_name}.${i}_v;" | tee -a create_views.hql;
-	{ echo "create view ${db_name}.${i}_v as select"; hive --database=${db_name} -hivevar tab=$i -e 'show columns in ${tab};' | grep -v 'INFO' | grep -v 'WARN' | tr '\n' ',' | sed 's/,$/\n/' | tr -d ' '; echo "from ${db_name}.${i};"; } | tr '\n' ' ' | sed 's/ $/\n/' | tee -a create_views.hql
+	columns=`hive --database=${db_name} -hivevar tab=$i -e 'show columns in ${tab};' | grep -v 'INFO' | grep -v 'WARN' | tr '\n' ',' | sed 's/,$/\n/' | tr -d ' '`;
+	echo "create view ${db_name}.${i}_v as select ${columns} from ${db_name}.${i};" | tee -a create_views.hql;
 done;
