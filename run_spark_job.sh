@@ -18,7 +18,7 @@ spark-submit \
 --driver-cores X \
 --driver-memory XG \
 --num-executors X \
---executor-cors X \
+--executor-cores X \
 --executor-memory XG \
 --conf spark.app.name=Project_name \
 --conf spark.hadoop.hive.exec.dynamic.partition=true \
